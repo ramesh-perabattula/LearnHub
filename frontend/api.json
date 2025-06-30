@@ -1,0 +1,925 @@
+{
+  "api_documentation": {
+    "title": "LearnHub Platform API Documentation",
+    "version": "1.0.0",
+    "base_url": "https://api.learnhub.com/v1",
+    "description": "Complete API endpoints for LearnHub learning management system",
+    "authentication": {
+      "type": "Bearer Token",
+      "header": "Authorization: Bearer <token>",
+      "description": "JWT token required for authenticated endpoints"
+    }
+  },
+  "endpoints": {
+    "authentication": {
+      "login": {
+        "method": "POST",
+        "url": "/auth/login",
+        "description": "User login authentication",
+        "request_body": {
+          "email": "string (required)",
+          "password": "string (required)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "user": {
+              "id": 1,
+              "name": "John Doe",
+              "email": "student@example.com",
+              "role": "user",
+              "avatar": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+              "created_at": "2024-01-15T10:30:00Z",
+              "updated_at": "2024-01-15T10:30:00Z"
+            }
+          }
+        },
+        "response_error": {
+          "status": 401,
+          "error": {
+            "message": "Invalid email or password",
+            "code": "INVALID_CREDENTIALS"
+          }
+        }
+      },
+      "register": {
+        "method": "POST",
+        "url": "/auth/register",
+        "description": "User registration",
+        "request_body": {
+          "name": "string (required)",
+          "email": "string (required)",
+          "password": "string (required)",
+          "role": "string (optional, default: user)"
+        },
+        "response_success": {
+          "status": 201,
+          "data": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "user": {
+              "id": 2,
+              "name": "Jane Smith",
+              "email": "jane@example.com",
+              "role": "user",
+              "avatar": null,
+              "created_at": "2024-01-15T10:30:00Z",
+              "updated_at": "2024-01-15T10:30:00Z"
+            }
+          }
+        }
+      },
+      "logout": {
+        "method": "POST",
+        "url": "/auth/logout",
+        "description": "User logout (invalidate token)",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "message": "Successfully logged out"
+          }
+        }
+      },
+      "refresh": {
+        "method": "POST",
+        "url": "/auth/refresh",
+        "description": "Refresh JWT token",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        }
+      }
+    },
+    "users": {
+      "get_profile": {
+        "method": "GET",
+        "url": "/users/profile",
+        "description": "Get current user profile",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "id": 1,
+            "name": "John Doe",
+            "email": "student@example.com",
+            "role": "user",
+            "avatar": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+            "created_at": "2024-01-15T10:30:00Z",
+            "updated_at": "2024-01-15T10:30:00Z"
+          }
+        }
+      },
+      "update_profile": {
+        "method": "PUT",
+        "url": "/users/profile",
+        "description": "Update user profile",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "request_body": {
+          "name": "string (optional)",
+          "email": "string (optional)",
+          "avatar": "string (optional)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "id": 1,
+            "name": "John Doe Updated",
+            "email": "student@example.com",
+            "role": "user",
+            "avatar": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+            "created_at": "2024-01-15T10:30:00Z",
+            "updated_at": "2024-01-16T10:30:00Z"
+          }
+        }
+      },
+      "get_all_users": {
+        "method": "GET",
+        "url": "/users",
+        "description": "Get all users (Admin only)",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "query_params": {
+          "page": "number (optional, default: 1)",
+          "limit": "number (optional, default: 10)",
+          "role": "string (optional, filter by role)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "users": [
+              {
+                "id": 1,
+                "name": "John Doe",
+                "email": "student@example.com",
+                "role": "user",
+                "avatar": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+                "created_at": "2024-01-15T10:30:00Z"
+              }
+            ],
+            "pagination": {
+              "current_page": 1,
+              "total_pages": 5,
+              "total_users": 50,
+              "per_page": 10
+            }
+          }
+        }
+      }
+    },
+    "courses": {
+      "get_all_courses": {
+        "method": "GET",
+        "url": "/courses",
+        "description": "Get all available courses",
+        "query_params": {
+          "page": "number (optional, default: 1)",
+          "limit": "number (optional, default: 10)",
+          "search": "string (optional, search in title/description)",
+          "category": "string (optional, filter by category)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "courses": [
+              {
+                "id": 1,
+                "title": "Introduction to React",
+                "description": "Learn the fundamentals of React.js and build modern web applications.",
+                "thumbnail": "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg",
+                "video_url": "https://res.cloudinary.com/demo/video/upload/v1/samples/elephants.mp4",
+                "teacher_id": 2,
+                "teacher_name": "Jane Smith",
+                "teacher_avatar": "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg",
+                "enrolled_students": 45,
+                "duration": "4 hours",
+                "level": "Beginner",
+                "category": "Web Development",
+                "price": 99.99,
+                "created_at": "2024-01-15T10:30:00Z",
+                "updated_at": "2024-01-15T10:30:00Z"
+              }
+            ],
+            "pagination": {
+              "current_page": 1,
+              "total_pages": 3,
+              "total_courses": 25,
+              "per_page": 10
+            }
+          }
+        }
+      },
+      "get_course_by_id": {
+        "method": "GET",
+        "url": "/courses/{id}",
+        "description": "Get specific course details",
+        "path_params": {
+          "id": "number (required)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "id": 1,
+            "title": "Introduction to React",
+            "description": "Learn the fundamentals of React.js and build modern web applications.",
+            "thumbnail": "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg",
+            "video_url": "https://res.cloudinary.com/demo/video/upload/v1/samples/elephants.mp4",
+            "teacher_id": 2,
+            "teacher_name": "Jane Smith",
+            "teacher_avatar": "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg",
+            "enrolled_students": 45,
+            "duration": "4 hours",
+            "level": "Beginner",
+            "category": "Web Development",
+            "price": 99.99,
+            "syllabus": [
+              {
+                "title": "Introduction to React",
+                "duration": "30 minutes"
+              },
+              {
+                "title": "Components and JSX",
+                "duration": "45 minutes"
+              }
+            ],
+            "created_at": "2024-01-15T10:30:00Z",
+            "updated_at": "2024-01-15T10:30:00Z"
+          }
+        }
+      },
+      "create_course": {
+        "method": "POST",
+        "url": "/courses",
+        "description": "Create new course (Teacher only)",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "request_body": {
+          "title": "string (required)",
+          "description": "string (required)",
+          "thumbnail": "string (required)",
+          "video_url": "string (required)",
+          "duration": "string (optional)",
+          "level": "string (optional)",
+          "category": "string (optional)",
+          "price": "number (optional)"
+        },
+        "response_success": {
+          "status": 201,
+          "data": {
+            "id": 4,
+            "title": "Advanced JavaScript",
+            "description": "Master advanced JavaScript concepts and ES6+ features.",
+            "thumbnail": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg",
+            "video_url": "https://res.cloudinary.com/demo/video/upload/v1/samples/sea-turtle.mp4",
+            "teacher_id": 2,
+            "teacher_name": "Jane Smith",
+            "enrolled_students": 0,
+            "created_at": "2024-01-16T10:30:00Z",
+            "updated_at": "2024-01-16T10:30:00Z"
+          }
+        }
+      },
+      "update_course": {
+        "method": "PUT",
+        "url": "/courses/{id}",
+        "description": "Update course (Teacher/Admin only)",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "path_params": {
+          "id": "number (required)"
+        },
+        "request_body": {
+          "title": "string (optional)",
+          "description": "string (optional)",
+          "thumbnail": "string (optional)",
+          "video_url": "string (optional)",
+          "duration": "string (optional)",
+          "level": "string (optional)",
+          "category": "string (optional)",
+          "price": "number (optional)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "id": 1,
+            "title": "Introduction to React - Updated",
+            "description": "Learn the fundamentals of React.js and build modern web applications.",
+            "thumbnail": "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg",
+            "video_url": "https://res.cloudinary.com/demo/video/upload/v1/samples/elephants.mp4",
+            "teacher_id": 2,
+            "teacher_name": "Jane Smith",
+            "enrolled_students": 45,
+            "created_at": "2024-01-15T10:30:00Z",
+            "updated_at": "2024-01-16T10:30:00Z"
+          }
+        }
+      },
+      "delete_course": {
+        "method": "DELETE",
+        "url": "/courses/{id}",
+        "description": "Delete course (Teacher/Admin only)",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "path_params": {
+          "id": "number (required)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "message": "Course deleted successfully"
+          }
+        }
+      },
+      "get_teacher_courses": {
+        "method": "GET",
+        "url": "/courses/teacher",
+        "description": "Get courses created by current teacher",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "courses": [
+              {
+                "id": 1,
+                "title": "Introduction to React",
+                "description": "Learn the fundamentals of React.js and build modern web applications.",
+                "thumbnail": "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg",
+                "video_url": "https://res.cloudinary.com/demo/video/upload/v1/samples/elephants.mp4",
+                "enrolled_students": 45,
+                "created_at": "2024-01-15T10:30:00Z"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "enrollments": {
+      "enroll_in_course": {
+        "method": "POST",
+        "url": "/enrollments",
+        "description": "Enroll in a course",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "request_body": {
+          "course_id": "number (required)"
+        },
+        "response_success": {
+          "status": 201,
+          "data": {
+            "id": 1,
+            "user_id": 1,
+            "course_id": 1,
+            "enrolled_at": "2024-01-16T10:30:00Z",
+            "completed": false,
+            "completed_at": null,
+            "progress": 0
+          }
+        }
+      },
+      "get_user_enrollments": {
+        "method": "GET",
+        "url": "/enrollments/user",
+        "description": "Get current user's enrolled courses",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "enrollments": [
+              {
+                "id": 1,
+                "user_id": 1,
+                "course_id": 1,
+                "enrolled_at": "2024-01-16T10:30:00Z",
+                "completed": false,
+                "completed_at": null,
+                "progress": 25,
+                "course": {
+                  "id": 1,
+                  "title": "Introduction to React",
+                  "description": "Learn the fundamentals of React.js and build modern web applications.",
+                  "thumbnail": "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg",
+                  "teacher_name": "Jane Smith"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "mark_course_completed": {
+        "method": "PUT",
+        "url": "/enrollments/{id}/complete",
+        "description": "Mark course as completed",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "path_params": {
+          "id": "number (required, enrollment ID)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "id": 1,
+            "user_id": 1,
+            "course_id": 1,
+            "enrolled_at": "2024-01-16T10:30:00Z",
+            "completed": true,
+            "completed_at": "2024-01-20T10:30:00Z",
+            "progress": 100
+          }
+        }
+      },
+      "update_progress": {
+        "method": "PUT",
+        "url": "/enrollments/{id}/progress",
+        "description": "Update course progress",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "path_params": {
+          "id": "number (required, enrollment ID)"
+        },
+        "request_body": {
+          "progress": "number (required, 0-100)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "id": 1,
+            "user_id": 1,
+            "course_id": 1,
+            "enrolled_at": "2024-01-16T10:30:00Z",
+            "completed": false,
+            "completed_at": null,
+            "progress": 75
+          }
+        }
+      }
+    },
+    "certificates": {
+      "get_user_certificates": {
+        "method": "GET",
+        "url": "/certificates/user",
+        "description": "Get current user's certificates",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "certificates": [
+              {
+                "id": 1,
+                "user_id": 1,
+                "course_id": 1,
+                "certificate_url": "https://certificates.learnhub.com/cert_123456.pdf",
+                "issued_at": "2024-01-20T10:30:00Z",
+                "verification_code": "LH-2024-001-123456",
+                "course": {
+                  "id": 1,
+                  "title": "Introduction to React",
+                  "description": "Learn the fundamentals of React.js and build modern web applications.",
+                  "teacher_name": "Jane Smith"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "generate_certificate": {
+        "method": "POST",
+        "url": "/certificates/generate",
+        "description": "Generate certificate for completed course",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "request_body": {
+          "course_id": "number (required)"
+        },
+        "response_success": {
+          "status": 201,
+          "data": {
+            "id": 1,
+            "user_id": 1,
+            "course_id": 1,
+            "certificate_url": "https://certificates.learnhub.com/cert_123456.pdf",
+            "issued_at": "2024-01-20T10:30:00Z",
+            "verification_code": "LH-2024-001-123456"
+          }
+        }
+      },
+      "verify_certificate": {
+        "method": "GET",
+        "url": "/certificates/verify/{verification_code}",
+        "description": "Verify certificate authenticity",
+        "path_params": {
+          "verification_code": "string (required)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "valid": true,
+            "certificate": {
+              "id": 1,
+              "user_name": "John Doe",
+              "course_title": "Introduction to React",
+              "teacher_name": "Jane Smith",
+              "issued_at": "2024-01-20T10:30:00Z",
+              "verification_code": "LH-2024-001-123456"
+            }
+          }
+        }
+      }
+    },
+    "dashboard": {
+      "get_user_dashboard": {
+        "method": "GET",
+        "url": "/dashboard/user",
+        "description": "Get user dashboard statistics",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "enrolled_courses": 5,
+            "completed_courses": 3,
+            "in_progress_courses": 2,
+            "certificates_earned": 3,
+            "total_learning_hours": 24,
+            "recent_activities": [
+              {
+                "type": "course_completed",
+                "course_title": "Introduction to React",
+                "date": "2024-01-20T10:30:00Z"
+              },
+              {
+                "type": "course_enrolled",
+                "course_title": "Advanced JavaScript",
+                "date": "2024-01-19T10:30:00Z"
+              }
+            ]
+          }
+        }
+      },
+      "get_teacher_dashboard": {
+        "method": "GET",
+        "url": "/dashboard/teacher",
+        "description": "Get teacher dashboard statistics",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "total_courses": 8,
+            "total_students": 156,
+            "total_revenue": 15600.00,
+            "avg_rating": 4.7,
+            "recent_enrollments": [
+              {
+                "student_name": "John Doe",
+                "course_title": "Introduction to React",
+                "enrolled_at": "2024-01-20T10:30:00Z"
+              }
+            ],
+            "course_performance": [
+              {
+                "course_id": 1,
+                "course_title": "Introduction to React",
+                "enrolled_students": 45,
+                "completion_rate": 78
+              }
+            ]
+          }
+        }
+      },
+      "get_admin_dashboard": {
+        "method": "GET",
+        "url": "/dashboard/admin",
+        "description": "Get admin dashboard statistics",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "total_users": 1250,
+            "total_teachers": 45,
+            "total_students": 1200,
+            "total_courses": 156,
+            "total_enrollments": 3450,
+            "total_certificates": 2100,
+            "platform_revenue": 245600.00,
+            "monthly_growth": {
+              "users": 12.5,
+              "courses": 8.3,
+              "revenue": 15.7
+            },
+            "recent_activities": [
+              {
+                "type": "new_user",
+                "user_name": "Alice Johnson",
+                "date": "2024-01-20T10:30:00Z"
+              },
+              {
+                "type": "course_created",
+                "course_title": "Python for Beginners",
+                "teacher_name": "Bob Smith",
+                "date": "2024-01-20T09:15:00Z"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "file_upload": {
+      "upload_image": {
+        "method": "POST",
+        "url": "/upload/image",
+        "description": "Upload image file (thumbnails, avatars)",
+        "headers": {
+          "Authorization": "Bearer <token>",
+          "Content-Type": "multipart/form-data"
+        },
+        "request_body": {
+          "file": "file (required, image file)",
+          "type": "string (optional, avatar|thumbnail|general)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "url": "https://cdn.learnhub.com/images/1234567890.jpg",
+            "filename": "1234567890.jpg",
+            "size": 245760,
+            "type": "image/jpeg"
+          }
+        }
+      },
+      "upload_video": {
+        "method": "POST",
+        "url": "/upload/video",
+        "description": "Upload video file to Cloudinary",
+        "headers": {
+          "Authorization": "Bearer <token>",
+          "Content-Type": "multipart/form-data"
+        },
+        "request_body": {
+          "file": "file (required, video file)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "url": "https://res.cloudinary.com/learnhub/video/upload/v1234567890/course_video.mp4",
+            "public_id": "course_video_1234567890",
+            "duration": 3600,
+            "format": "mp4",
+            "size": 52428800
+          }
+        }
+      }
+    },
+    "search": {
+      "search_courses": {
+        "method": "GET",
+        "url": "/search/courses",
+        "description": "Search courses by title, description, or teacher",
+        "query_params": {
+          "q": "string (required, search query)",
+          "category": "string (optional)",
+          "level": "string (optional)",
+          "price_min": "number (optional)",
+          "price_max": "number (optional)",
+          "page": "number (optional, default: 1)",
+          "limit": "number (optional, default: 10)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "courses": [
+              {
+                "id": 1,
+                "title": "Introduction to React",
+                "description": "Learn the fundamentals of React.js and build modern web applications.",
+                "thumbnail": "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg",
+                "teacher_name": "Jane Smith",
+                "price": 99.99,
+                "rating": 4.8,
+                "enrolled_students": 45
+              }
+            ],
+            "total_results": 15,
+            "pagination": {
+              "current_page": 1,
+              "total_pages": 2,
+              "per_page": 10
+            }
+          }
+        }
+      }
+    },
+    "notifications": {
+      "get_notifications": {
+        "method": "GET",
+        "url": "/notifications",
+        "description": "Get user notifications",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "query_params": {
+          "unread_only": "boolean (optional, default: false)",
+          "page": "number (optional, default: 1)",
+          "limit": "number (optional, default: 20)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "notifications": [
+              {
+                "id": 1,
+                "type": "course_completed",
+                "title": "Course Completed!",
+                "message": "Congratulations! You've completed 'Introduction to React'",
+                "read": false,
+                "created_at": "2024-01-20T10:30:00Z",
+                "data": {
+                  "course_id": 1,
+                  "course_title": "Introduction to React"
+                }
+              }
+            ],
+            "unread_count": 3
+          }
+        }
+      },
+      "mark_notification_read": {
+        "method": "PUT",
+        "url": "/notifications/{id}/read",
+        "description": "Mark notification as read",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "path_params": {
+          "id": "number (required)"
+        },
+        "response_success": {
+          "status": 200,
+          "data": {
+            "message": "Notification marked as read"
+          }
+        }
+      }
+    }
+  },
+  "error_responses": {
+    "400": {
+      "description": "Bad Request",
+      "example": {
+        "status": 400,
+        "error": {
+          "message": "Validation failed",
+          "code": "VALIDATION_ERROR",
+          "details": [
+            {
+              "field": "email",
+              "message": "Email is required"
+            }
+          ]
+        }
+      }
+    },
+    "401": {
+      "description": "Unauthorized",
+      "example": {
+        "status": 401,
+        "error": {
+          "message": "Authentication required",
+          "code": "UNAUTHORIZED"
+        }
+      }
+    },
+    "403": {
+      "description": "Forbidden",
+      "example": {
+        "status": 403,
+        "error": {
+          "message": "Insufficient permissions",
+          "code": "FORBIDDEN"
+        }
+      }
+    },
+    "404": {
+      "description": "Not Found",
+      "example": {
+        "status": 404,
+        "error": {
+          "message": "Resource not found",
+          "code": "NOT_FOUND"
+        }
+      }
+    },
+    "500": {
+      "description": "Internal Server Error",
+      "example": {
+        "status": 500,
+        "error": {
+          "message": "Internal server error",
+          "code": "INTERNAL_ERROR"
+        }
+      }
+    }
+  },
+  "data_models": {
+    "User": {
+      "id": "number",
+      "name": "string",
+      "email": "string",
+      "role": "string (user|teacher|admin)",
+      "avatar": "string|null",
+      "created_at": "string (ISO 8601)",
+      "updated_at": "string (ISO 8601)"
+    },
+    "Course": {
+      "id": "number",
+      "title": "string",
+      "description": "string",
+      "thumbnail": "string",
+      "video_url": "string",
+      "teacher_id": "number",
+      "teacher_name": "string",
+      "teacher_avatar": "string|null",
+      "enrolled_students": "number",
+      "duration": "string",
+      "level": "string",
+      "category": "string",
+      "price": "number",
+      "rating": "number",
+      "created_at": "string (ISO 8601)",
+      "updated_at": "string (ISO 8601)"
+    },
+    "Enrollment": {
+      "id": "number",
+      "user_id": "number",
+      "course_id": "number",
+      "enrolled_at": "string (ISO 8601)",
+      "completed": "boolean",
+      "completed_at": "string|null (ISO 8601)",
+      "progress": "number (0-100)"
+    },
+    "Certificate": {
+      "id": "number",
+      "user_id": "number",
+      "course_id": "number",
+      "certificate_url": "string",
+      "verification_code": "string",
+      "issued_at": "string (ISO 8601)"
+    }
+  },
+  "rate_limiting": {
+    "description": "API rate limiting applies to all endpoints",
+    "limits": {
+      "authenticated": "1000 requests per hour",
+      "unauthenticated": "100 requests per hour"
+    },
+    "headers": {
+      "X-RateLimit-Limit": "Maximum requests per hour",
+      "X-RateLimit-Remaining": "Remaining requests in current window",
+      "X-RateLimit-Reset": "Time when rate limit resets (Unix timestamp)"
+    }
+  },
+  "pagination": {
+    "description": "Standard pagination format for list endpoints",
+    "query_params": {
+      "page": "number (default: 1)",
+      "limit": "number (default: 10, max: 100)"
+    },
+    "response_format": {
+      "data": "array of items",
+      "pagination": {
+        "current_page": "number",
+        "total_pages": "number",
+        "total_items": "number",
+        "per_page": "number"
+      }
+    }
+  }
+}

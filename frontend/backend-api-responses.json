@@ -1,0 +1,253 @@
+{
+  "authentication_responses": {
+    "login": {
+      "success": {
+        "token": "jwt_token_string",
+        "user": {
+          "id": 1,
+          "name": "John Doe",
+          "email": "student@example.com",
+          "role": "user",
+          "avatar": "https://example.com/avatar.jpg"
+        }
+      },
+      "error": {
+        "message": "Invalid credentials"
+      }
+    },
+    "register": {
+      "success": {
+        "token": "jwt_token_string",
+        "user": {
+          "id": 2,
+          "name": "Jane Smith",
+          "email": "jane@example.com",
+          "role": "user",
+          "avatar": null
+        }
+      }
+    }
+  },
+  "user_responses": {
+    "get_profile": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "student@example.com",
+      "role": "user",
+      "avatar": "https://example.com/avatar.jpg"
+    },
+    "get_all_users": {
+      "users": [
+        {
+          "id": 1,
+          "name": "John Doe",
+          "email": "student@example.com",
+          "role": "user",
+          "avatar": "https://example.com/avatar.jpg"
+        }
+      ],
+      "total": 50
+    }
+  },
+  "course_responses": {
+    "get_all_courses": {
+      "courses": [
+        {
+          "id": 1,
+          "title": "Introduction to React",
+          "description": "Learn React fundamentals",
+          "thumbnail": "https://example.com/thumbnail.jpg",
+          "videoUrl": "https://cloudinary.com/video.mp4",
+          "teacherId": 2,
+          "teacherName": "Jane Smith",
+          "enrolledStudents": 45,
+          "createdAt": "2024-01-15"
+        }
+      ]
+    },
+    "get_course_by_id": {
+      "id": 1,
+      "title": "Introduction to React",
+      "description": "Learn React fundamentals",
+      "thumbnail": "https://example.com/thumbnail.jpg",
+      "videoUrl": "https://cloudinary.com/video.mp4",
+      "teacherId": 2,
+      "teacherName": "Jane Smith",
+      "enrolledStudents": 45,
+      "createdAt": "2024-01-15"
+    },
+    "create_course": {
+      "id": 4,
+      "title": "New Course Title",
+      "description": "Course description",
+      "thumbnail": "https://example.com/thumbnail.jpg",
+      "videoUrl": "https://cloudinary.com/video.mp4",
+      "teacherId": 2,
+      "teacherName": "Jane Smith",
+      "enrolledStudents": 0,
+      "createdAt": "2024-01-16"
+    },
+    "get_teacher_courses": {
+      "courses": [
+        {
+          "id": 1,
+          "title": "Introduction to React",
+          "description": "Learn React fundamentals",
+          "thumbnail": "https://example.com/thumbnail.jpg",
+          "videoUrl": "https://cloudinary.com/video.mp4",
+          "enrolledStudents": 45,
+          "createdAt": "2024-01-15"
+        }
+      ]
+    }
+  },
+  "enrollment_responses": {
+    "enroll_in_course": {
+      "userId": 1,
+      "courseId": 1,
+      "enrolledAt": "2024-01-16",
+      "completed": false
+    },
+    "get_user_enrollments": {
+      "enrollments": [
+        {
+          "userId": 1,
+          "courseId": 1,
+          "enrolledAt": "2024-01-16",
+          "completed": false,
+          "course": {
+            "id": 1,
+            "title": "Introduction to React",
+            "description": "Learn React fundamentals",
+            "thumbnail": "https://example.com/thumbnail.jpg",
+            "teacherName": "Jane Smith"
+          }
+        }
+      ]
+    },
+    "mark_completed": {
+      "userId": 1,
+      "courseId": 1,
+      "enrolledAt": "2024-01-16",
+      "completed": true,
+      "completedAt": "2024-01-20"
+    }
+  },
+  "certificate_responses": {
+    "get_user_certificates": {
+      "certificates": [
+        {
+          "id": 1,
+          "userId": 1,
+          "courseId": 1,
+          "certificateUrl": "https://certificates.com/cert123.pdf",
+          "issuedAt": "2024-01-20",
+          "verificationCode": "LH-2024-001",
+          "course": {
+            "id": 1,
+            "title": "Introduction to React",
+            "description": "Learn React fundamentals",
+            "teacherName": "Jane Smith"
+          }
+        }
+      ]
+    },
+    "generate_certificate": {
+      "id": 1,
+      "userId": 1,
+      "courseId": 1,
+      "certificateUrl": "https://certificates.com/cert123.pdf",
+      "issuedAt": "2024-01-20",
+      "verificationCode": "LH-2024-001"
+    }
+  },
+  "dashboard_responses": {
+    "user_dashboard": {
+      "enrolledCourses": 5,
+      "completedCourses": 3,
+      "inProgressCourses": 2,
+      "certificatesEarned": 3,
+      "recentActivities": [
+        {
+          "type": "course_completed",
+          "courseTitle": "Introduction to React",
+          "date": "2024-01-20"
+        }
+      ]
+    },
+    "teacher_dashboard": {
+      "totalCourses": 8,
+      "totalStudents": 156,
+      "avgStudentsPerCourse": 19,
+      "recentEnrollments": [
+        {
+          "studentName": "John Doe",
+          "courseTitle": "Introduction to React",
+          "enrolledAt": "2024-01-20"
+        }
+      ]
+    },
+    "admin_dashboard": {
+      "totalUsers": 1250,
+      "totalTeachers": 45,
+      "totalStudents": 1200,
+      "totalCourses": 156,
+      "totalEnrollments": 3450,
+      "platformStats": {
+        "monthlyGrowth": 12.5,
+        "completionRate": 78.3
+      }
+    }
+  },
+  "file_upload_responses": {
+    "upload_image": {
+      "url": "https://cdn.example.com/images/123456.jpg",
+      "filename": "123456.jpg",
+      "size": 245760
+    },
+    "upload_video": {
+      "url": "https://res.cloudinary.com/demo/video/upload/v123/video.mp4",
+      "publicId": "video_123456",
+      "duration": 3600
+    }
+  },
+  "search_responses": {
+    "search_courses": {
+      "courses": [
+        {
+          "id": 1,
+          "title": "Introduction to React",
+          "description": "Learn React fundamentals",
+          "thumbnail": "https://example.com/thumbnail.jpg",
+          "teacherName": "Jane Smith",
+          "enrolledStudents": 45,
+          "rating": 4.8
+        }
+      ],
+      "totalResults": 15
+    }
+  },
+  "error_responses": {
+    "validation_error": {
+      "message": "Validation failed",
+      "errors": [
+        {
+          "field": "email",
+          "message": "Email is required"
+        }
+      ]
+    },
+    "unauthorized": {
+      "message": "Authentication required"
+    },
+    "forbidden": {
+      "message": "Insufficient permissions"
+    },
+    "not_found": {
+      "message": "Resource not found"
+    },
+    "server_error": {
+      "message": "Internal server error"
+    }
+  }
+}
