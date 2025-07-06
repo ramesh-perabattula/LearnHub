@@ -20,6 +20,16 @@ function CreateCourse() {
       return;
     }
 
+    // Simple client-side check for Cloudinary or YouTube
+    if (!(
+      videoUrl.startsWith('https://res.cloudinary.com/') ||
+      videoUrl.includes('youtube.com') ||
+      videoUrl.includes('youtu.be')
+    )) {
+      alert('Video URL must be a Cloudinary or YouTube link');
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -49,7 +59,8 @@ function CreateCourse() {
   const sampleVideos = [
     'https://res.cloudinary.com/demo/video/upload/v1/samples/elephants.mp4',
     'https://res.cloudinary.com/demo/video/upload/v1/samples/sea-turtle.mp4',
-    'https://res.cloudinary.com/demo/video/upload/v1/samples/cld-sample-video.mp4'
+    'https://res.cloudinary.com/demo/video/upload/v1/samples/cld-sample-video.mp4',
+    'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
   ];
 
   return (
@@ -139,7 +150,7 @@ function CreateCourse() {
 
           <div>
             <label htmlFor="videoUrl" className="block text-sm font-medium text-gray-700 mb-2">
-              Video URL (Cloudinary) *
+              Video URL (Cloudinary or YouTube) *
             </label>
             <input
               type="url"
@@ -147,7 +158,7 @@ function CreateCourse() {
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="https://res.cloudinary.com/demo/video/upload/..."
+              placeholder="https://res.cloudinary.com/demo/video/upload/... or https://www.youtube.com/watch?v=..."
               required
             />
             
